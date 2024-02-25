@@ -15,24 +15,24 @@ namespace Repository
         {
             _context = context; 
         }
-        public async Task<ICollection<Tarefas>> GetTasks()
+        public ICollection<Tarefas> GetTasks()
         {
-            return await _context.Tarefas.OrderBy(x => x.Id).ToListAsync();
+            return  _context.Tarefas.OrderBy(x => x.Id).ToList();
         }
 
-        public async Task<Tarefas> GetTask(int id)
+        public Tarefas GetTask(int id)
         {
-            return await _context.Tarefas.Where(t => t.Id == id).FirstOrDefaultAsync();
+            return  _context.Tarefas.Where(t => t.Id == id).FirstOrDefault();
         }
 
-        public async Task<Tarefas> GetTaskByDescription(string descricao)
+        public Tarefas GetTaskByDescription(string descricao)
         {
-            return await _context.Tarefas.Where(x => x.Descricao == descricao).FirstOrDefaultAsync();
+            return  _context.Tarefas.Where(x => x.Descricao == descricao).FirstOrDefault();
         }
 
-        public async Task<ICollection<Tarefas>> GetTask(DateTime date)
+        public ICollection<Tarefas> GetTask(DateTime date)
         {
-            return await _context.Tarefas.Where(x => x.Data.Date == date).ToListAsync();
+            return _context.Tarefas.Where(x => x.Data.Date == date).ToList();
         }
 
         public bool TaskExists(int taskId)
@@ -40,9 +40,5 @@ namespace Repository
             return _context.Tarefas.Any(x => x.Id == taskId);  
         }
 
-        public Task<int> UpdateTask()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

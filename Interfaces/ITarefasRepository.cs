@@ -4,11 +4,10 @@ namespace Interfaces
 {
     public interface ITarefasRepository
     {
-        Task<ICollection<Tarefas>> GetTasks();
-        Task<Tarefas> GetTask(int id);
-        Task<Tarefas> GetTaskByDescription(string descricao);
-        Task<ICollection<Tarefas>> GetTask(DateTime date);
+        ICollection<Tarefas> GetTasks();
+        Tarefas GetTask(int id);
+        Tarefas GetTaskByDescription(string descricao);
+        ICollection<Tarefas> GetTask(DateTime date);
         bool TaskExists(int taskId);
-        Task<int> UpdateTask();
     }
 }

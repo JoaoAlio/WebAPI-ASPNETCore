@@ -23,9 +23,9 @@ namespace Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Tarefas>))]
-        public async Task<IActionResult> GetTasks()
+        public IActionResult GetTasks()
         {
-            var tasks = _mapper.Map<List<TarefasDto>>(await _tarefasRepository.GetTasks());
+            var tasks = _mapper.Map<List<TarefasDto>>(_tarefasRepository.GetTasks());
 
             if (!ModelState.IsValid)
             {
@@ -35,15 +35,15 @@ namespace Controllers
             return Ok(tasks);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetTask/{id}")]
         [ProducesResponseType(200, Type = typeof(Tarefas))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetTask(int id)
+        public  IActionResult GetTask(int id)
         {
             if (!_tarefasRepository.TaskExists(id))
                 return NotFound();
 
-            var task = _mapper.Map<TarefasDto>(await _tarefasRepository.GetTask(id));
+            var task = _mapper.Map<TarefasDto>( _tarefasRepository.GetTask(id));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,12 +51,12 @@ namespace Controllers
             return Ok(task);
         }
 
-        [HttpGet("ByDescription/{descricao}")]
+        [HttpGet("GetTaskByDescription/{descricao}")]
         [ProducesResponseType(200, Type = typeof(Tarefas))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetTaskByDescription(string descricao)
+        public IActionResult GetTaskByDescription(string descricao)
         {
-            var tarefa = _mapper.Map<TarefasDto>(await _tarefasRepository.GetTaskByDescription(descricao));
+            var tarefa = _mapper.Map<TarefasDto>(_tarefasRepository.GetTaskByDescription(descricao));
 
             if (tarefa == null)
                 return NotFound();
@@ -67,5 +67,6 @@ namespace Controllers
             return Ok(tarefa);
 
         }
+        
     }
 }
