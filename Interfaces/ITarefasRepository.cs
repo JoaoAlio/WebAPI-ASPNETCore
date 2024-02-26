@@ -7,7 +7,7 @@ namespace Interfaces
         ICollection<Tarefas> GetTasks();
         Tarefas GetTask(int id);
         Tarefas GetTaskByDescription(string descricao);
-        ICollection<Tarefas> GetTask(DateTime date);
+        ICollection<Tarefas> GetTasksByDate(DateTime date);
         bool TaskExists(int taskId);
     }
 }

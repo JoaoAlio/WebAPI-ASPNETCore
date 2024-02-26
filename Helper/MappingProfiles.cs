@@ -9,6 +9,8 @@ namespace Helper
         public MappingProfiles()
         {
             CreateMap<Tarefas, TarefasDto>();
+            CreateMap<Usuario, UsuarioDto>();   
+            CreateMap<Categoria, CategoriaDto>();
         }
     }
 }

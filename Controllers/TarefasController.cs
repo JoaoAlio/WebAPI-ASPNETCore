@@ -56,16 +56,32 @@ namespace Controllers
         [ProducesResponseType(400)]
         public IActionResult GetTaskByDescription(string descricao)
         {
-            var tarefa = _mapper.Map<TarefasDto>(_tarefasRepository.GetTaskByDescription(descricao));
+            var task = _mapper.Map<TarefasDto>(_tarefasRepository.GetTaskByDescription(descricao));
 
-            if (tarefa == null)
+            if (task == null)
                 return NotFound();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(tarefa);
+            return Ok(task);
 
+        }
+
+        [HttpGet("GetTaskByDate/{date}")]
+        [ProducesResponseType(200, Type = typeof(Tarefas))]
+        [ProducesResponseType(400)]
+        public IActionResult GetTasksByDate(DateTime date)
+        {
+            var task = _mapper.Map<List<TarefasDto>>(_tarefasRepository.GetTasksByDate(date));
+
+            if(task == null)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            return Ok(task);
         }
         
     }

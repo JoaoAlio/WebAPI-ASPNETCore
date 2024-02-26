@@ -30,7 +30,7 @@ namespace Repository
             return  _context.Tarefas.Where(x => x.Descricao == descricao).FirstOrDefault();
         }
 
-        public ICollection<Tarefas> GetTask(DateTime date)
+        public ICollection<Tarefas> GetTasksByDate(DateTime date)
         {
             return _context.Tarefas.Where(x => x.Data.Date == date).ToList();
         }
