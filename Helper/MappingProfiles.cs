@@ -11,6 +11,11 @@ namespace Helper
             CreateMap<Tarefas, TarefasDto>();
             CreateMap<Usuario, UsuarioDto>();   
             CreateMap<Categoria, CategoriaDto>();
+            CreateMap<CategoriaRank, CategoriaRankDto>();
+            CreateMap<TarefasDto, Tarefas>();
+            CreateMap<UsuarioDto, Usuario>();
+            CreateMap<CategoriaDto, Categoria>();
+            CreateMap<CategoriaRankDto, CategoriaRank>();
         }
     }
 }

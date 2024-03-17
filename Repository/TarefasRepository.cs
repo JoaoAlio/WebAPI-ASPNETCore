@@ -1,4 +1,5 @@
 ﻿using Data;
+using Dto;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,5 +41,43 @@ namespace Repository
             return _context.Tarefas.Any(x => x.Id == taskId);  
         }
 
+        public bool CreateTask(Tarefas task, int userId, int categoryId)
+        {
+            var taskUserEntity = _context.Usuarios.Where(u => u.Id == userId).FirstOrDefault();
+            var taskCategoryEntity = _context.Categorias.Where(c => c.Id == categoryId).FirstOrDefault();
+
+            var tarefa = new Tarefas()
+            {
+                Descricao = task.Descricao,
+                Data = task.Data,
+                Categoria = taskCategoryEntity,
+                Usuario = taskUserEntity
+            };
+
+            _context.Add(tarefa);
+
+            return Save();
+
+        }
+
+        public bool UpdateTask(Tarefas task, int userId, int categoryId)
+        {
+            task.UsuarioId = userId;
+            task.CategoriaId = categoryId;
+            _context.Update(task);
+            return Save();
+        }
+
+        public bool DeleteTask(Tarefas task) 
+        {
+            _context.Remove(task);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

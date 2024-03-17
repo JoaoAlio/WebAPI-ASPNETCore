@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ASPNETCoreWEBAPO.Migrations
+namespace WebAPIASPNETCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240218163006_InitialCreate")]
+    [Migration("20240314011816_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace ASPNETCoreWEBAPO.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Categoria", b =>
+            modelBuilder.Entity("Models.Categoria", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,15 +32,37 @@ namespace ASPNETCoreWEBAPO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CategoriaRankId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriaRankId");
+
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Tarefas", b =>
+            modelBuilder.Entity("Models.CategoriaRank", b =>
+                {
+                    b.Property<int>("CategoriaRankId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoriaRankId"), 1L, 1);
+
+                    b.Property<string>("CategoriaRankDescricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoriaRankId");
+
+                    b.ToTable("CategoriaRank");
+                });
+
+            modelBuilder.Entity("Models.Tarefas", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +92,7 @@ namespace ASPNETCoreWEBAPO.Migrations
                     b.ToTable("Tarefas");
                 });
 
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Usuario", b =>
+            modelBuilder.Entity("Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,16 +113,27 @@ namespace ASPNETCoreWEBAPO.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Tarefas", b =>
+            modelBuilder.Entity("Models.Categoria", b =>
                 {
-                    b.HasOne("ASPNETCoreWEBAPO.Models.Categoria", "Categoria")
-                        .WithMany("Tarefas")
+                    b.HasOne("Models.CategoriaRank", "CatRank")
+                        .WithMany("Categorias")
+                        .HasForeignKey("CategoriaRankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CatRank");
+                });
+
+            modelBuilder.Entity("Models.Tarefas", b =>
+                {
+                    b.HasOne("Models.Categoria", "Categoria")
+                        .WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ASPNETCoreWEBAPO.Models.Usuario", "Usuario")
-                        .WithMany("Tarefas")
+                    b.HasOne("Models.Usuario", "Usuario")
+                        .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -110,14 +143,9 @@ namespace ASPNETCoreWEBAPO.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Categoria", b =>
+            modelBuilder.Entity("Models.CategoriaRank", b =>
                 {
-                    b.Navigation("Tarefas");
-                });
-
-            modelBuilder.Entity("ASPNETCoreWEBAPO.Models.Usuario", b =>
-                {
-                    b.Navigation("Tarefas");
+                    b.Navigation("Categorias");
                 });
 #pragma warning restore 612, 618
         }

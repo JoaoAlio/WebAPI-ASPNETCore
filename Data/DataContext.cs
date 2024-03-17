@@ -13,11 +13,16 @@ namespace Data
 
         public DbSet<Tarefas> Tarefas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<CategoriaRank> CategoriaRank { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Categoria>()
+                .HasOne(c => c.CatRank)
+                .WithMany(cr => cr.Categoria)
+                .HasForeignKey(c => c.CategoriaRankId);     
         }
     }
 }

@@ -66,5 +66,82 @@ namespace Controllers
             return Ok(category);
 
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        public IActionResult CreateCategory([FromBody] CategoriaDto category, [FromQuery] int catRankId)
+        {
+            if(category == null)
+                return BadRequest(ModelState);
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+             var categoryMap = _mapper.Map<Categoria>(category);
+
+            if(!_categoriaRepository.CreateCategory(categoryMap, catRankId))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Sucessfully created");
+
+        }
+
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCategory(int categoryId, [FromQuery] int catRankId, [FromBody] CategoriaDto category)
+        {
+            if (category == null)
+                return BadRequest(ModelState);
+
+            if (categoryId != category.Id)
+                return BadRequest(ModelState);
+
+            if (!_categoriaRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var categoryMap = _mapper.Map<Categoria>(category);
+
+            if (!_categoriaRepository.UpdateCategory(categoryMap, catRankId))
+            {
+                ModelState.AddModelError("", "Something went wrong updating category");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCategory(int categoryId)
+        {
+            if (!_categoriaRepository.CategoryExists(categoryId))
+            {
+                return NotFound();
+            }
+
+            var categoryToDelete = _categoriaRepository.GetCategory(categoryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_categoriaRepository.DeleteCategory(categoryToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting category");
+            }
+
+            return NoContent();
+        }
+
     }
 }
